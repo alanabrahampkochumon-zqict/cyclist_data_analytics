@@ -128,3 +128,17 @@ get_station_name <- function(lat, lng) {
 
 head(data_frame_cleaned)
 glimpse(data_frame_cleaned)
+
+# Checking for BIAS
+# 1. How much of the station information is missing
+(sum(is.na(data_frame_cleaned$start_station_id)) / dim(data_frame_cleaned)[1]) * 100 # Nearly 20% of Start Station are missing
+(sum(is.na(data_frame_cleaned$end_station_id) / dim(data_frame_cleaned)[1])) * 100 # Nearly 21% of End Stations are missing
+
+# 2. Is the missing station information uniformly spread depending rider type?
+data_frame_cleaned |>
+  mutate(start_station_missing=is.na(start_station_id) | is.na(start_station_name)) |>
+  group_by(member_casual) |>
+  summarise(pct_missing = mean(start_station_missing) * 100, n = n())
+# The data is evenly distributed among both members and casual riders
+
+# 3. Is the missing station information
