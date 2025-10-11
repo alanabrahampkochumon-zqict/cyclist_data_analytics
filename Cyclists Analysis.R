@@ -1,19 +1,23 @@
-### ASK ###
-# Business Question (WHY):
-# How can Cyclistic convert more casual riders into annual members?
+#' ### ASK ###
 
-# Subquestions to query (Examples)
+# Business Question (WHY):
+# How do annual members and casual
+# riders use Cyclistic bikes differently?
+
+# SubQuestions (Examples)
 # 1. Do casual riders take longer or shorter ride than members?
 # 2. Are casual riders more active on weekends vs weekdays?
 # 3. Are they concentrated in certain months or stations
 #    (seasonality or location patterns)?
 # 4. What time of day do members vs casual riders prefer?
 
-### HOUSEKEEPING ###
-install.packages("tidyverse")
+
 
 
 #' ### PREPARE ###
+
+### HOUSEKEEPING ###
+install.packages("tidyverse")
 
 # Load the libraries required for analysis and data importing
 library(dplyr)
@@ -45,11 +49,15 @@ glimpse(data_frame_raw)
 dim(data_frame_raw)
 View(data_frame_raw)
 
+
+
+
 #' ### PROCESS ###
 #' Data Cleaning
 
 # 1. Run clean_names to clean the column names
-data_frame_cleaned <- data_frame_raw |> clean_names()
+#    and remove duplicates if any
+data_frame_cleaned <- data_frame_raw |> clean_names() |> distinct()
 
 # 2. Get the number of minutes for each ride
 data_frame_cleaned <- data_frame_cleaned |>
@@ -112,8 +120,74 @@ data_frame_cleaned |>
     start_station_missing = is.na(start_station_id) | is.na(start_station_name)
   ) |>
   group_by(member_casual) |>
-  summarise(pct_missing = mean(start_station_missing) * 100, n = n())
+  summarise(
+    station_missing_percent = mean(start_station_missing) * 100,
+    n = n()
+  )
 # The data is evenly distributed among both members and casual riders
 
+# c. Is the missing station information uniformly spread by bike(rideable) type
+data_frame_cleaned |>
+  mutate(
+    start_station_missing = is.na(start_station_id) | is.na(start_station_name)
+  ) |>
+  group_by(rideable_type) |>
+  summarise(
+    station_missing_percent = mean(start_station_missing) * 100,
+    n = n()
+  )
+# It is not evenly distributed.
+# 0% of classic bikes have missing location,
+# 32.9% of electric bike have missing location, and
+# 46.9% of electric scooters have missing location
+
+# d. Is the rideable_type missing for a particular season?
+print(
+  data_frame_cleaned |>
+    mutate(
+      start_station_missing = is.na(start_station_id) |
+        is.na(start_station_name)
+    ) |>
+    group_by(rideable_type, month) |>
+    summarise(
+      station_missing_percent = mean(start_station_missing) * 100,
+      n = n(),
+      .groups = "drop"
+    ) |>
+    arrange(rideable_type, month),
+  n = 36
+)
+# Electric Scooters are missing start station location
+# at a rate of 25% - 35% per month
+# Electric Scooters have even distribution of missing location,
+# but only 2 months worth data is availabe
+
+#' Further exploring electric scooter
+#' Since they only appear during September and October
+electric_riders <- data_frame_cleaned |>
+  filter(rideable_type == "electric_scooter")
+total_electric_riders <- dim(electric_riders)[1]
+
+electric_riders |>
+  group_by(member_casual) |>
+  summarise(percent_member = (n() / total_electric_riders) * 100)
+
+# e. What percent does each rideables make up for the entire bikes
+total_bikes <- dim(data_frame_cleaned)[1]
+data_frame_cleaned |>
+  group_by(rideable_type) |>
+  summarise(percent_share = ((n() / total_bikes) * 100))
+
+#' Dropping the electric scooter category
+#' since we have limited data
+#' 1. Around 50% of data is missing location
+#' 2. It makes up only 2% of the data
+#' 3. Limited month available (Sept, and Oct)
+data_frame_cleaned <- data_frame_cleaned |>
+  filter(rideable_type != "electric_scooter")
+unique(data_frame_cleaned$rideable_type)
 
 glimpse(data_frame_cleaned)
+
+# FINALIZE CLEANING
+data_frame_cleaned |> write.csv("Data/cleaned_dataset.csv")
