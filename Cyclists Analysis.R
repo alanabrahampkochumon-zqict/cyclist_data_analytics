@@ -1,10 +1,12 @@
 ### ASK ###
-# Business Question (WHY): How can Cyclistic convert more casual riders into annual members?
+# Business Question (WHY):
+# How can Cyclistic convert more casual riders into annual members?
 
 # Subquestions to query (Examples)
 # 1. Do casual riders take longer or shorter ride than members?
 # 2. Are casual riders more active on weekends vs weekdays?
-# 3. Are they concentrated in certain months or stations (seasonality or location patterns)?
+# 3. Are they concentrated in certain months or stations
+#    (seasonality or location patterns)?
 # 4. What time of day do members vs casual riders prefer?
 
 ### HOUSEKEEPING ###
@@ -23,9 +25,14 @@ directory <- "./Data"
 files <- list.files(directory)
 
 # Read the files and store it in a dataframe
+# Changelog 11-10-2025T05:38:00 Adding filtering for reading only csv files
 data_frame_raw <- data.frame()
 for (filename in files) {
-  data_frame_raw <- rbind(data_frame_raw, read_csv(paste(directory, filename, sep = "/")))
+  if (endsWith(filename, ".csv"))
+    data_frame_raw <- rbind(
+      data_frame_raw,
+      read_csv(paste(directory, filename, sep = "/"))
+    )
 }
 
 # View the summary of the data frame
@@ -40,11 +47,16 @@ data_frame_cleaned <- data_frame_raw |> clean_names()
 
 # 1. Get the number of minutes for each ride
 data_frame_cleaned <- data_frame_raw |>
-  mutate(ride_length=difftime(ended_at, started_at, unit="mins")) |>
-  mutate(ride_length=as.numeric(ride_length)) |>
-  mutate(ride_length_cat=cut(ride_length, breaks = c(0, 5, 10, 15, 30, 45, 60, Inf), labels = c("0 - 5", "5 - 10", "10 - 15", "15 - 30", "30 - 45", "45 - 60", "60+"))) |>
-  mutate(start_day_of_week=strftime(started_at, format = "%A")) |>
-  mutate(month=strftime(started_at, format = "%m"))
+  mutate(ride_length = difftime(ended_at, started_at, unit="mins")) |>
+  mutate(ride_length = as.numeric(ride_length)) |>
+  mutate(ride_length_cat = cut(
+                            ride_length,
+                            breaks = c(0, 5, 10, 15, 30, 45, 60, Inf),
+                            labels = c("0 - 5", "5 - 10", "10 - 15", "15 - 30", "30 - 45", "45 - 60", "60+")
+        )
+        ) |>
+  mutate(start_day_of_week = strftime(started_at, format = "%A")) |>
+  mutate(month = strftime(started_at, format = "%m"))
 
 # --------FUNCTION START----------
 # Function that converts from latlng delta to distance using Haversine formula
@@ -79,9 +91,9 @@ data_frame_cleaned <- data_frame_cleaned |>
 data_frame_cleaned <- data_frame_cleaned |>
   mutate(start_hour=strftime(started_at, "%H")) |>
   mutate(start_hour=as.numeric(start_hour)) |>
-  mutate(time_of_day=case_when(
+  mutate(time_of_day = case_when(
     start_hour >= 0 & start_hour < 5  ~ "Late Night",
-    start_hour >=5 & start_hour < 9 ~ "Late Morning",
+    start_hour >= 5 & start_hour < 9 ~ "Late Morning",
     start_hour >= 9 & start_hour < 12 ~ "Mid Morning",
     start_hour >= 12 & start_hour < 15 ~ "Early Afternoon",
     start_hour >= 15 & start_hour < 18 ~ "Late Afternoon",
