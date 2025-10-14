@@ -84,8 +84,8 @@ data_frame_cleaned <- data_frame_cleaned |>
 
 # 4. Add a start time (day, night, early morning...) categorization to the data
 data_frame_cleaned <- data_frame_cleaned |>
-  mutate(start_hour=strftime(started_at, "%H")) |>
-  mutate(start_hour=as.numeric(start_hour)) |>
+  mutate(start_hour = strftime(started_at, "%H")) |>
+  mutate(start_hour = as.numeric(start_hour)) |>
   mutate(time_of_day = case_when(
     start_hour >= 0 & start_hour < 5  ~ "Late Night",
     start_hour >= 5 & start_hour < 9 ~ "Late Morning",
