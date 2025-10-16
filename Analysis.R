@@ -2,7 +2,7 @@
 ### HOUSEKEEPING ###
 install.packages("tidyverse")
 install.packages("ggplot2")
-install.packages("ggrastr")
+install.packages("hexbin")
 
 # Load the libraries required for analysis and data importing
 library(readr)
