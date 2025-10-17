@@ -13,7 +13,7 @@ plot_directory <- "Plots/"
 
 # Load the cleaned dataset into memory
 data_frame <- read.csv("./Data/Cleaned_Data_14_10_2025.csv")
-data_frame <- data_frame |> select(-c("X"))
+data_frame <- data_frame |> select(-"X")
 
 # NOTE: geom_point work in Dataspell (No graph is plotted),
 # But it will work in RStudio
