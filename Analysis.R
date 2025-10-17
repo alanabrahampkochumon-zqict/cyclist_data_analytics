@@ -19,8 +19,9 @@ data_frame <- data_frame |> select(-c("X"))
 # But it will work in RStudio
 # You can export the graph as png though
 plot <- ggplot(data_frame, aes(x = distance_rode_km, y = ride_length)) +
-  geom_hex() +
+  geom_point() +
   scale_y_log10() +
+  scale_x_log10() +
   labs(
     x = "Distance (KM)",
     y = "Ride Length (minutes)",
@@ -29,7 +30,7 @@ plot <- ggplot(data_frame, aes(x = distance_rode_km, y = ride_length)) +
 # Lots of clustering near zero km mark
 # NOTE: Can't load the graph in DataSpell so exporting it to png
 ggsave(
-  paste(plot_directory, "ride_length_vs_distance.png"),
+  paste(plot_directory, "ride_length_vs_distance_5.8m_samples.png"),
   plot,
   width = 8,
   height = 6,
