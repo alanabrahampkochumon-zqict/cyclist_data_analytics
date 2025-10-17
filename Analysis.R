@@ -21,7 +21,6 @@ data_frame <- data_frame |> select(-c("X"))
 plot <- ggplot(data_frame, aes(x = distance_rode_km, y = ride_length)) +
   geom_point() +
   scale_y_log10() +
-  scale_x_log10() +
   labs(
     x = "Distance (KM)",
     y = "Ride Length (minutes)",
