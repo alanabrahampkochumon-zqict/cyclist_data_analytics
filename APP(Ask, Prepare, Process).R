@@ -12,8 +12,6 @@
 # 4. What time of day do members vs casual riders prefer?
 
 
-
-
 #' ### PREPARE ###
 
 ### HOUSEKEEPING ###

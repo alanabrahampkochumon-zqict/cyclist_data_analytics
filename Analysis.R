@@ -15,7 +15,7 @@ plot_directory <- "Plots/"
 data_frame <- read.csv("./Data/Cleaned_Data_14_10_2025.csv")
 data_frame <- data_frame |> select(-"X")
 
-# NOTE: geom_point work in Dataspell (No graph is plotted),
+# NOTE: geom_point will work in Dataspell (No graph is plotted),
 # But it will work in RStudio
 # You can export the graph as png though
 plot <- ggplot(data_frame, aes(x = distance_rode_km, y = ride_length)) +
@@ -58,18 +58,30 @@ ride_summary <- data_frame |>
 # The distance is around the same, but casual rides tends to be more longer
 # with more riders being members
 
+# The data was getting plotted in alphabetical order
+# Added factoring to fix that
+data_frame$ride_length_cat <- factor(
+  data_frame$ride_length_cat,
+  levels = c(
+    "0 - 5", "5 - 10", "10 - 15", "15 - 30", "30 - 45", "45 - 60", "60+"
+  )
+)
+
 # Lets see the distribution in a chart
 plot <- data_frame |>
-  filter(member_casual == "casual") |>
-  ggplot(aes(x = ride_length_cat)) +
-  geom_bar() +
+  group_by(member_casual, ride_length_cat) |>
+  arrange(ride_length_cat) |>
+  summarise(count = n()) |>
+  ggplot(aes(x = ride_length_cat, y = count, fill = member_casual)) +
+  geom_col(position = "dodge") +
   labs(
-    title = "Ride Duration vs Type of Rider",
-    x = "Ride Duration",
-    y = "Member vs Casual"
+    title = "Ride Duration vs Number of Riders (Members vs Casual)",
+    x = "Ride Duration (mins)",
+    y = "Number of Riders"
   )
+plot
 ggsave(
-  paste(plot_directory, "ride_duration_vs_casual_member.png"),
+  paste(plot_directory, "casual_riders_vs_members__ride_length.png"),
   plot,
   width = 8,
   height = 6,
