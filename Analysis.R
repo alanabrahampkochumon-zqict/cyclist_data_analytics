@@ -3,11 +3,13 @@
 install.packages("tidyverse")
 install.packages("ggplot2")
 install.packages("hexbin")
+install.packages("gridExtra")
 
 # Load the libraries required for analysis and data importing
 library(readr)
 library(ggplot2)
 library(dplyr)
+require(gridExtra)
 
 plot_directory <- "Plots/"
 
@@ -140,3 +142,70 @@ data_frame |>
 # particularly August, which are vacation months
 # Although member rides also fall, we can see more consistnet member rides,
 # suggesting members usually use bike for commute
+
+# Housekeeping: To preserve order, we need to add factoring to `time_of_day`
+data_frame$time_of_day <- factor(
+  data_frame$time_of_day,
+  levels = c(
+    "Mid Morning",
+    "Late Morning",
+    "Early Afternoon",
+    "Late Afternoon",
+    "Evening",
+    "Night",
+    "Late Night"
+  )
+)
+
+# Now we can compare ride distribution during various hours of the day
+data_frame |>
+  group_by(member_casual, time_of_day) |>
+  summarise(count = n()) |>
+  ggplot(aes(x = time_of_day, y = count, fill = member_casual)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Ride Distribution during various time frame",
+    x = "Time of Day",
+    y = "Number of Rides"
+  )
+# We can see that the rides, both for casuals and members
+# increase throughout the day, with both rides dipping after evening
+
+# Graphing each hour to see if our theory members using the bikes for commute
+# Work or Gym is on point
+data_frame |>
+  group_by(member_casual, start_hour) |>
+  summarise(count = n()) |>
+  ggplot(aes(x = start_hour, y = count, fill = member_casual)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Ride Distribution during Different Hour of the Day",
+    x = "Hour of Day",
+    y = "Number of Rides"
+  )
+
+# Let's the commute theory even further by filtering and separating
+# Weekdays vs weekends
+weekend_plot <- data_frame |>
+  filter(start_day_of_week != "Saturday" & start_day_of_week != "Sunday") |>
+  group_by(member_casual, start_hour) |>
+  summarise(count = n()) |>
+  ggplot(aes(x = start_hour, y = count, fill = member_casual)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Hourly Ride Distribution (Weekdays)",
+    x = "Hour of Day",
+    y = "Number of Rides"
+  )
+weekday_plot <- data_frame |>
+  filter(start_day_of_week == "Saturday" | start_day_of_week == "Sunday") |>
+  group_by(member_casual, start_hour) |>
+  summarise(count = n()) |>
+  ggplot(aes(x = start_hour, y = count, fill = member_casual)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Hourly Ride Distribution (Weekends)",
+    x = "Hour of Day",
+    y = "Number of Rides"
+  )
+grid.arrange(weekend_plot, weekday_plot, nrow = 2)
