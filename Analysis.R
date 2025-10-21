@@ -70,16 +70,15 @@ data_frame$ride_length_cat <- factor(
 # Lets see the distribution in a chart
 plot <- data_frame |>
   group_by(member_casual, ride_length_cat) |>
-  arrange(ride_length_cat) |>
   summarise(count = n()) |>
   ggplot(aes(x = ride_length_cat, y = count, fill = member_casual)) +
   geom_col(position = "dodge") +
   labs(
-    title = "Ride Duration vs Number of Riders (Members vs Casual)",
+    title = "Number of Rides vs Ride Duration (Members vs Casual)",
     x = "Ride Duration (mins)",
-    y = "Number of Riders"
+    y = "Number of Rides"
   )
-plot
+plot # Graph is not heavy, it renders
 ggsave(
   paste(plot_directory, "casual_riders_vs_members__ride_length.png"),
   plot,
@@ -87,3 +86,57 @@ ggsave(
   height = 6,
   dpi = 150
 )
+# We can observe that the casual members dominate 30+ minute ride
+# This could mean that members use bike routine commutes
+# while casuals use them for leisure
+
+# Adding a factor to days of the week for correct visualization
+# Kept weekends last to easily cluster and see weekday vs weekend
+data_frame$start_day_of_week <- factor(
+  data_frame$start_day_of_week,
+  levels = c(
+    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+  )
+)
+
+# We can further analyze the data to confirm
+# if the rides are popular during weekdays or weekends
+data_frame |>
+  group_by(member_casual, start_day_of_week) |>
+  summarise(count = n()) |>
+  ggplot(aes(x = start_day_of_week, y = count, fill = member_casual)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Number of Riders vs Day of Week (Members vs Casual)",
+    x = "Day of Week",
+    y = "Number of Rides"
+  )
+
+# We can see that the usage is more distributed for members
+# while casual rides tend to increase day by day until Saturday
+# and shows a small drop on Sunday
+# The higher rides on Weekends suggests that casual riders use bikes
+# for leisure
+
+# We can now explore months to understand whether casual riders are only pooled
+# During certain months like vacation, or whether weather has an influence
+data_frame |>
+  mutate(month_name = factor(
+    month.name[month],
+    levels = month.name,
+    ordered = TRUE
+  )) |>
+  group_by(member_casual, month_name) |>
+  summarise(count = n()) |>
+  ggplot(aes(x = month_name, y = count, fill = member_casual)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Number of Riders vs Month of year (Members vs Casual)",
+    x = "Day of Week",
+    y = "Number of Rides"
+  )
+# We can see an rides lower rides during winter months (Dec - Feb)
+# But it increases from there and peaks during summer months,
+# particularly August, which are vacation months
+# Although member rides also fall, we can see more consistnet member rides,
+# suggesting members usually use bike for commute
