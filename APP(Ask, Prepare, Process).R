@@ -56,6 +56,12 @@ View(data_frame_raw)
 # 1. Run clean_names to clean the column names
 #    and remove duplicates if any
 data_frame_cleaned <- data_frame_raw |> clean_names() |> distinct()
+data_frame_cleaned$started_at <- with_tz(
+  data_frame_cleaned$started_at, tzone = "America/Chicago"
+)
+data_frame_cleaned$ended_at <- with_tz(
+  data_frame_cleaned$ended_at, tzone = "America/Chicago"
+)
 
 # 2. Get the number of minutes for each ride
 data_frame_cleaned <- data_frame_cleaned |>

@@ -184,6 +184,16 @@ data_frame |>
     y = "Number of Rides"
   )
 
+# FIXED: Data Discrepency caused by TZ mismatch
+data_frame$started_at <- with_tz(
+  data_frame$started_at, tzone = "America/Chicago"
+)
+data_frame$ended_at <- with_tz(
+  data_frame$ended_at, tzone = "America/Chicago"
+)
+data_frame$start_hour <- hour(data_frame$started_at)
+data_frame |> write.csv("Data/Cleaned_Data_14_10_2025.csv")
+
 # Let's the commute theory even further by filtering and separating
 # Weekdays vs weekends
 weekend_plot <- data_frame |>
