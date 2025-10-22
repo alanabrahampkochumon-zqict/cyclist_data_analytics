@@ -219,3 +219,23 @@ weekday_plot <- data_frame |>
     y = "Number of Rides"
   )
 grid.arrange(weekend_plot, weekday_plot, nrow = 2)
+# After fixing the timezone we can see that
+# more member rides use bike during weekdays
+# to commute to work
+# However, we can a lot of night rides during weekends, for both casual
+# and members
+
+# Finally let's explore the distribution of rideable types
+# Among members and casuals
+data_frame |>
+  group_by(rideable_type, member_casual) |>
+  summarise(count = n()) |>
+  ggplot(aes(x = rideable_type, y = count, fill = member_casual)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Ride Distribution of Members and Casuals against Bike Type",
+    x = "Ride Type",
+    y = "Number of Rides"
+  )
+# Both ride types are used by members and casuals with members leading
+# Electric bikes are preferred by both members and casuals
