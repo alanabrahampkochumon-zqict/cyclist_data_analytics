@@ -239,3 +239,33 @@ data_frame |>
   )
 # Both ride types are used by members and casuals with members leading
 # Electric bikes are preferred by both members and casuals
+
+member_plot <- data_frame |>
+  filter(member_casual == "member") |>
+  group_by(rideable_type, start_day_of_week) |>
+  summarise(count = n()) |>
+  ggplot(aes(x = start_day_of_week, y = count, fill = rideable_type)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Rideable Type used by members against day of week",
+    x = "Start Day of Week",
+    y = "Number of Rides"
+  )
+
+casual_plot <- data_frame |>
+  filter(member_casual == "casual") |>
+  group_by(rideable_type, start_day_of_week) |>
+  summarise(count = n()) |>
+  ggplot(aes(x = start_day_of_week, y = count, fill = rideable_type)) +
+  geom_col(position = "dodge") +
+  labs(
+    title = "Rideable Type used by casuals against day of week",
+    x = "Start Day of Week",
+    y = "Number of Rides"
+  )
+grid.arrange(member_plot, casual_plot, nrow = 2)
+# We can see that members use classic bike
+# more or less consistently throughout the week
+# But casuals use both classic and electric bikes
+# during the weekend more, indicating further that
+# Casuals use electric bikes for leisure
