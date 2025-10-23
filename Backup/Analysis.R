@@ -14,7 +14,7 @@ require(gridExtra)
 plot_directory <- "Plots/"
 
 # Load the cleaned dataset into memory
-data_frame <- read.csv("./Data/Cleaned_Data_14_10_2025.csv")
+data_frame <- read.csv("Cleaned_Data_14_10_2025.csv")
 data_frame <- data_frame |> select(-"X")
 
 # NOTE: geom_point will work in Dataspell (No graph is plotted),
@@ -184,7 +184,7 @@ data_frame |>
     y = "Number of Rides"
   )
 
-# FIXED: Data Discrepency caused by TZ mismatch
+# FIXED: RawData Discrepency caused by TZ mismatch
 data_frame$started_at <- with_tz(
   data_frame$started_at, tzone = "America/Chicago"
 )
@@ -192,7 +192,7 @@ data_frame$ended_at <- with_tz(
   data_frame$ended_at, tzone = "America/Chicago"
 )
 data_frame$start_hour <- hour(data_frame$started_at)
-data_frame |> write.csv("Data/Cleaned_Data_14_10_2025.csv")
+data_frame |> write.csv("Cleaned_Data_14_10_2025.csv")
 
 # Let's the commute theory even further by filtering and separating
 # Weekdays vs weekends

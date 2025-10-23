@@ -23,10 +23,10 @@ library(readr)
 library(janitor)
 library(lubridate)
 library(tidyr)
-source("Utils.R")
+source("../Utils.R")
 
-# Read the filenames in the Data directory
-directory <- "./Data"
+# Read the filenames in the RawData directory
+directory <- "../RawData"
 files <- list.files(directory)
 
 
@@ -51,7 +51,7 @@ View(data_frame_raw)
 
 
 #' ### PROCESS ###
-#' Data Cleaning
+#' RawData Cleaning
 
 # 1. Run clean_names to clean the column names
 #    and remove duplicates if any
@@ -92,8 +92,8 @@ data_frame_cleaned <- data_frame_cleaned |>
   mutate(start_hour = as.numeric(start_hour)) |>
   mutate(time_of_day = case_when(
     start_hour >= 0 & start_hour < 5  ~ "Late Night",
-    start_hour >= 5 & start_hour < 9 ~ "Late Morning",
-    start_hour >= 9 & start_hour < 12 ~ "Mid Morning",
+    start_hour >= 5 & start_hour < 9 ~ "Morning",
+    start_hour >= 9 & start_hour < 12 ~ "Late Morning",
     start_hour >= 12 & start_hour < 15 ~ "Early Afternoon",
     start_hour >= 15 & start_hour < 18 ~ "Late Afternoon",
     start_hour >= 18 & start_hour < 22 ~ "Evening",
@@ -194,4 +194,4 @@ unique(data_frame_cleaned$rideable_type)
 glimpse(data_frame_cleaned)
 
 # FINALIZE CLEANING
-data_frame_cleaned |> write.csv("Data/cleaned_dataset.csv")
+data_frame_cleaned |> write.csv("../Data/cleaned_dataset.csv")

@@ -13,7 +13,7 @@ library(ggplot2)
 library(dplyr)
 
 # Load the cleaned dataset into memory
-data_frame <- read.csv("./Data/cleaned_dataset.csv")
+data_frame <- read.csv("../Data/cleaned_dataset.csv")
 
 # Just to refresh our memory, view the dataset
 glimpse(data_frame)
@@ -51,7 +51,7 @@ data_frame |> filter(ride_length < 1) |> count(member_casual, rideable_type)
 # Drop the rides
 valid_rides <- data_frame |> filter(distance_rode_km > 0 & ride_length >= 1)
 
-# Data quantification
+# RawData quantification
 # Total Rides
 total_rides <- valid_rides |> nrow() # 5,837,410 rides
 
@@ -82,4 +82,4 @@ valid_rides <- valid_rides |>
 valid_rides |> summary()
 
 # Write to external file
-write.csv(valid_rides, "Data/Cleaned_Data_14_10_2025.csv")
+write.csv(valid_rides, "Cleaned_Data_14_10_2025.csv")

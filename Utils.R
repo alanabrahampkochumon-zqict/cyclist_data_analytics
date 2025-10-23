@@ -25,3 +25,5 @@ latlng_to_distance_km <- function(lat1, lon1, lat2, lon2) {
 
   r * c
 }
+
+latlng_to_distance_km_v <- Vectorize(latlng_to_distance_km)
