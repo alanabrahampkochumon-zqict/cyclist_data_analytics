@@ -193,5 +193,7 @@ unique(data_frame_cleaned$rideable_type)
 
 glimpse(data_frame_cleaned)
 
+
+
 # FINALIZE CLEANING
 data_frame_cleaned |> write.csv("../Data/cleaned_dataset.csv")

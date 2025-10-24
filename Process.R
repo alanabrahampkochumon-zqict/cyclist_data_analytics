@@ -153,7 +153,7 @@ plot <- data_frame |>
   )
 
 ggsave(
-  paste(graphs_directory, missing_station_percent_graph, sep="/"),
+  paste(graphs_directory, missing_station_percent_graph, sep = "/"),
   plot,
   width = 12,
   height = 7,
@@ -163,3 +163,64 @@ ggsave(
 # at a rate of 25% - 35% per month
 # Electric Scooters have even distribution of missing location,
 # but only 2 months worth data is availabe
+
+# Because Electric Scooter Data is only available for
+# 2 months, we need explore the data to decide whether to include
+# or drop them
+# First, much of the dataset is electric scooter
+data_frame |>
+  filter(rideable_type == "electric_scooter") |>
+  summarise(electric_scooter_percent = n() / nrow(data_frame) * 100)
+# Only 2.2 % of the entire dataset is electric scooters
+
+# How much location data is missing from electric scooters
+data_frame |>
+  filter(rideable_type == "electric_scooter") |>
+  summarise(
+    missing_location =
+      sum(is.na(start_station_id) | is.na(start_station_name)) / n() * 100
+  )
+# Nearly 46.8% percent of scooters are missing location data
+
+# Dropping the electric scooter category
+# since we have limited data
+# 1. Around 50% of data is missing location
+# 2. It makes up only 2% of the data
+# 3. Limited month available (Sept, and Oct)
+data_frame <- data_frame |>
+  filter(rideable_type != "electric_scooter")
+
+# Checking to ensure that electric scooters are dropped
+unique(data_frame$rideable_type)
+
+# Upon further inspection of the dataset we can observe that there are rides
+# that are noise, lower distance and higher time duration
+# We can get a summary of that data
+# One sample of impossible rides where distance rode is humanely impossible
+# Assuming a top speed of 80km/h (best case scenario)
+# The rider could have travelled a max distance of 80/60 = 1.33KM
+# in one minute, so we can round that to 2 km
+data_frame |>
+  filter(distance_rode_km > 2 & ride_length < 1) |>
+  summary()
+# There are 90 rows which doesnt't contribute much to the dataset,
+# so we can remove them
+data_frame <- data_frame |>
+  filter(!(distance_rode_km > 2 & ride_length < 1))
+
+# Next we can check for rides with 0km rode
+data_frame |>
+  filter(distance_rode_km == 0 & start_lat == end_lat & start_lng == end_lng) |>
+  nrow()
+# Nearly 375K rides are 0KM rides, we will need to drop them since they don't
+# contribute to the data since they are not really "rides"
+data_frame <- data_frame |>
+  filter(
+    !(distance_rode_km == 0 & start_lat == end_lat & start_lng == end_lng)
+  )
+
+# FINALIZE CLEANING
+data_frame |> write.csv(
+  paste(data_directory, cleaned_data_filename, sep = "/"),
+  row.names = FALSE
+)
