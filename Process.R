@@ -96,6 +96,20 @@ data_frame <- data_frame |>
     start_hour >= 18 & start_hour < 22 ~ "Evening",
     TRUE ~ "Night"
   )
+  ) |>
+  mutate(
+    time_of_day = factor(
+      time_of_day,
+      levels = c(
+        "Late Night",
+        "Morning",
+        "Late Morning",
+        "Early Afternoon",
+        "Late Afternoon",
+        "Evening",
+        "Night"
+      )
+    )
   )
 
 ### Bias Checking ###
@@ -218,6 +232,23 @@ data_frame <- data_frame |>
   filter(
     !(distance_rode_km == 0 & start_lat == end_lat & start_lng == end_lng)
   )
+
+# Drop all enteries having distance_rode_km of NA
+data_frame <- data_frame |>
+  filter(!(is.na(distance_rode_km)))
+
+# Drop all enteries having ride_length_cat of NA
+data_frame <- data_frame |>
+  filter(!(is.na(ride_length_cat)))
+
+# Adding a factor to days of the week for correct visualization
+# Kept weekends last to easily cluster and see weekday vs weekend
+data_frame$start_day_of_week <- factor(
+  data_frame$start_day_of_week,
+  levels = c(
+    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+  )
+)
 
 # FINALIZE CLEANING
 data_frame |> write.csv(
