@@ -222,17 +222,6 @@ data_frame |>
 data_frame <- data_frame |>
   filter(!(distance_rode_km > 2 & ride_length < 1))
 
-# Next we can check for rides with 0km rode
-data_frame |>
-  filter(distance_rode_km == 0 & start_lat == end_lat & start_lng == end_lng) |>
-  nrow()
-# Nearly 375K rides are 0KM rides, we will need to drop them since they don't
-# contribute to the data since they are not really "rides"
-data_frame <- data_frame |>
-  filter(
-    !(distance_rode_km == 0 & start_lat == end_lat & start_lng == end_lng)
-  )
-
 # Drop all enteries having distance_rode_km of NA
 data_frame <- data_frame |>
   filter(!(is.na(distance_rode_km)))
