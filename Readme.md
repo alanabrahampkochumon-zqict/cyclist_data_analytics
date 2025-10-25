@@ -162,6 +162,14 @@ But casuals use both classic and electric bikes during the weekend more, indicat
 
 
 
+## 6. Act
+
+1. TODO
+2. TODO
+3. TODO
+4. TODO
+
+
 ## What I Learned
 1. Make sure to correctly add the timezone to datetime fields. This is especially true if the data was collected in a timezone different from yours.
 2. If you want to preserve order, use factoring.

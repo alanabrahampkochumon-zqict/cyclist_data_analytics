@@ -65,3 +65,4 @@ data_frame |>
 # 14.5% of casuals use classic bike, whereas 25.5% of member use them
 # Electric bikes share a similar story, with members taking the lead
 # with a share of 37.6% compared to 22.4%
+
