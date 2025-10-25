@@ -44,42 +44,29 @@ data_frame$start_day_of_week <- factor(
 data_frame$time_of_day <- factor(
   data_frame$time_of_day,
   levels = c(
-        "Late Night",
-        "Morning",
-        "Late Morning",
-        "Early Afternoon",
-        "Late Afternoon",
-        "Evening",
-        "Night"
-      )
+    "Late Night",
+    "Morning",
+    "Late Morning",
+    "Early Afternoon",
+    "Late Afternoon",
+    "Evening",
+    "Night"
+  )
 )
 
 data_frame$ride_length_cat <- factor(
   data_frame$ride_length_cat,
   levels = c(
-      "0 - 5", "5 - 10", "10 - 15", "15 - 30", "30 - 45", "45 - 60", "60+"
-    )
+    "0 - 5", "5 - 10", "10 - 15", "15 - 30", "30 - 45", "45 - 60", "60+"
+  )
 )
 
 data_frame$month_name <- factor(
-    data_frame$month_name,
-    levels = month.name,
-    ordered = TRUE
-  )
+  data_frame$month_name,
+  levels = month.name,
+  ordered = TRUE
+)
 
-
-# Summary of dataset and characteristics
-# of Casual vs Member Riders
-ride_summary <- data_frame |>
-  group_by(member_casual) |>
-  summarise(
-    mean_distance = mean(distance_rode_km),
-    median_distance = median(distance_rode_km),
-    mean_duration = mean(ride_length),
-    median_duration = median(ride_length),
-    total_rides = n(),
-  )
-ride_summary
 # The distance is around the same, but casual rides tends to be more longer
 # with more riders being members
 

@@ -103,10 +103,14 @@ stages easily without looping and loading each file.
 
 ---
 
-
-
 ## 4. Analyze
 
+
+---
+
+
+
+## 5. Share
 
 ### 1. Ride Duration Categorized for Members and Casual Riders
 ![Number of Casual and Member Riders categorized by Ride Duration Graph](./Graphs/casual_riders_vs_members__ride_duration.png)
@@ -153,7 +157,11 @@ Electric bikes are preferred by both members and casuals.
 ![Usage Patterns of Electric vs Classic Bikes among Member and Casual Riders by Day of the Week)](./Graphs/casual_riders_vs_members__rideable_type_member_casual_distribution.png)
 We can see that members use classic bike more or less consistently throughout the week.
 But casuals use both classic and electric bikes during the weekend more, indicating further that casuals use bikes for leisure.
+
 ---
+
+
+
 ## What I Learned
 1. Make sure to correctly add the timezone to datetime fields. This is especially true if the data was collected in a timezone different from yours.
 2. If you want to preserve order, use factoring.
