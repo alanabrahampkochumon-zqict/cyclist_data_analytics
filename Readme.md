@@ -104,10 +104,57 @@ stages easily without looping and loading each file.
 ---
 
 
+
 ## 4. Analyze
 
 
+### 1. Ride Duration Categorized for Members and Casual Riders
+![Number of Casual and Member Riders categorized by Ride Duration Graph](./Graphs/casual_riders_vs_members__ride_duration.png)
 
+We can observe that casual members dominate 30+ minute ride. This could mean that members use bike routine commutes while casuals use them for leisure.
+
+
+### 2. Ride Popularity During Weekdays vs Weekends
+![Number of Casual and Member Riders categorized by Day of Week](./Graphs/casual_riders_vs_members__ride_day_distribution.png)
+
+We can observe that the usage is more distributed for members while casual rides tend to increase day by day until **Saturday** and shows a **small drop on Sunday**. The higher rides on weekends suggests that casual riders use bikes for leisure.
+
+
+### 3. Monthly Distribution of Casual vs Members
+![Number of Casual and Member Riders categorized by Month of Year](./Graphs/casual_riders_vs_members__ride_monthly_distribution.png)
+
+We can observe that rides are lower rides during winter months (Dec - Feb).
+But it increases from there and peaks during summer months, particularly August, which are vacation months.
+Although member rides also fall, we can see more consistent member rides, suggesting members usually use bike for commute.
+
+### 4. Ride Distribution during various Times of the Day
+![Ride Distribution during various daytime categories](./Graphs/casual_riders_vs_members__ride_daytime_cat_distribution.png)
+
+We can see that the rides, both for casuals and members increase throughout the day, with both rides dipping after evening.
+
+#### For Additional Insight, we can compare hourly ride insights
+![Ride Distribution during Different Hour of the Day](./Graphs/casual_riders_vs_members__ride_hourly_distribution.png)
+
+We can observe that the rides, both for casuals and members increase throughout the day, with both rides dipping after evening.
+
+### 5. Verifying that members use rides majorly for commute
+We can filter and separate weekends and weekdays to see riders' commute patterns.
+![Hourly Ride Distribution (Weekdays and Weekends separated)](./Graphs/casual_riders_vs_members__weekend_weekday_ride_hourly_distribution.png)
+
+More member rides use bike during weekdays to commute to work.
+However, we can a lot of night rides during weekends, for both casual and members.
+
+### 6. Usage Patterns of Electric vs Classic Bikes among Member and Casual Riders
+![Usage Patterns of Electric vs Classic Bikes among Member and Casual Riders)](./Graphs/casual_riders_vs_members__rideable_type_distribution.png)
+Both ride types are used by members and casuals with members leading the chart.
+Electric bikes are preferred by both members and casuals.
+
+### 7. Usage Patterns of Electric vs Classic Bikes among Member and Casual Riders by Day of Week
+![Usage Patterns of Electric vs Classic Bikes among Member and Casual Riders by Day of the Week)](./Graphs/casual_riders_vs_members__rideable_type_member_casual_distribution.png)
+We can see that members use classic bike more or less consistently throughout the week.
+But casuals use both classic and electric bikes during the weekend more, indicating further that casuals use bikes for leisure.
 ---
 ## What I Learned
-# Timezone
+1. Make sure to correctly add the timezone to datetime fields. This is especially true if the data was collected in a timezone different from yours.
+2. If you want to preserve order, use factoring.
+3. Some mistakes can reveal after data cleaning. If you keep a track of data, and the steps taken, and use version control, it is easy to go in and make necessary changes easily. (I misinterpreted 0KM rides as invalid, but there is big possibility that the rides started and ended at the same station)

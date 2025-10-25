@@ -14,24 +14,59 @@ data_directory <- "./Data"
 cleaned_data_filename <- "TripData_Cleaned_20251023.csv"
 graphs_directory <- "Graphs"
 ride_duration_graph <- "casual_riders_vs_members__ride_duration.png"
-day_distribution_graph <- "casual_riders_vs_members__ride_day_distribution.png"
-monthly_distribution_graph <-
+day_dist_graph <- "casual_riders_vs_members__ride_day_distribution.png"
+monthly_dist_graph <-
   "casual_riders_vs_members__ride_monthly_distribution.png"
-daytime_cat_distribution_graph <-
+daytime_cat_dist_graph <-
   "casual_riders_vs_members__ride_daytime_cat_distribution.png"
-hourly_ride_distribution_graph <-
+hourly_ride_dist_graph <-
   "casual_riders_vs_members__ride_hourly_distribution.png"
-hourly_ride_distribution_weekend_weekday_graph <-
+`hourly_ride_dist_comp_graph` <-
   "casual_riders_vs_members__weekend_weekday_ride_hourly_distribution.png"
-rideable_type_distribution_graph <-
+rideable_type_dist_graph <-
   "casual_riders_vs_members__rideable_type_distribution.png"
-rideable_type_distribution_member_casual_graph <-
+rideable_type_dist_mc_graph <-
   "casual_riders_vs_members__rideable_type_member_casual_distribution.png"
 
 # Load the data
 data_frame <- read.csv(
   paste(data_directory, cleaned_data_filename, sep = "/")
 )
+
+# Factoring Data to ensure the data is shown in the correct order
+data_frame$start_day_of_week <- factor(
+  data_frame$start_day_of_week,
+  levels = c(
+    "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+  )
+)
+
+data_frame$time_of_day <- factor(
+  data_frame$time_of_day,
+  levels = c(
+        "Late Night",
+        "Morning",
+        "Late Morning",
+        "Early Afternoon",
+        "Late Afternoon",
+        "Evening",
+        "Night"
+      )
+)
+
+data_frame$ride_length_cat <- factor(
+  data_frame$ride_length_cat,
+  levels = c(
+      "0 - 5", "5 - 10", "10 - 15", "15 - 30", "30 - 45", "45 - 60", "60+"
+    )
+)
+
+data_frame$month_name <- factor(
+    data_frame$month_name,
+    levels = month.name,
+    ordered = TRUE
+  )
+
 
 # Summary of dataset and characteristics
 # of Casual vs Member Riders
@@ -86,7 +121,7 @@ plot <- data_frame |>
   )
 plot
 ggsave(
-  paste(graphs_directory, day_distribution_graph, sep = "/"),
+  paste(graphs_directory, day_dist_graph, sep = "/"),
   plot,
   width = 12,
   height = 7,
@@ -112,7 +147,7 @@ plot <- data_frame |>
   )
 plot
 ggsave(
-  paste(graphs_directory, monthly_distribution_graph, sep = "/"),
+  paste(graphs_directory, monthly_dist_graph, sep = "/"),
   plot,
   width = 12,
   height = 7,
@@ -138,7 +173,7 @@ plot <- data_frame |>
   )
 plot
 ggsave(
-  paste(graphs_directory, daytime_cat_distribution_graph, sep = "/"),
+  paste(graphs_directory, daytime_cat_dist_graph, sep = "/"),
   plot,
   width = 12,
   height = 7,
@@ -162,7 +197,7 @@ plot <- data_frame |>
   )
 plot
 ggsave(
-  paste(graphs_directory, hourly_ride_distribution_graph, sep = "/"),
+  paste(graphs_directory, hourly_ride_dist_graph, sep = "/"),
   plot,
   width = 12,
   height = 7,
@@ -200,7 +235,7 @@ plot
 ggsave(
   paste(
     graphs_directory,
-    hourly_ride_distribution_weekend_weekday_graph,
+    `hourly_ride_dist_comp_graph`,
     sep = "/"
   ),
   plot,
@@ -229,7 +264,7 @@ plot
 ggsave(
   paste(
     graphs_directory,
-    rideable_type_distribution_graph,
+    rideable_type_dist_graph,
     sep = "/"
   ),
   plot,
@@ -270,7 +305,7 @@ plot
 ggsave(
   paste(
     graphs_directory,
-    rideable_type_distribution_member_casual_graph,
+    rideable_type_dist_mc_graph,
     sep = "/"
   ),
   plot,
