@@ -1,5 +1,5 @@
 # Data Analytics Case Study: Cyclists
-Done as a part of Google Data Analytics Professional Certificate
+Done as a part of the Google Data Analytics Professional Certificate
 
 -----
 Author: Alan Abraham Puthenparambil Kochumon
@@ -27,7 +27,7 @@ Design marketing strategies aimed at converting casual riders into annual member
 How do annual members and casual riders use Cyclistic bikes differently?
 
 ### Guiding Questions
-1. Do casual riders take longer or shorter ride than members?
+1. Do casual riders take longer or shorter rides than members?
 2. Are casual riders more active on weekends vs weekdays?
 3. Are they concentrated in certain months (seasonality or location patterns)?
 4. What time of day do members vs casual riders prefer?
@@ -39,7 +39,7 @@ How do annual members and casual riders use Cyclistic bikes differently?
 ## 2. Prepare (Prepare.R)
 
 
-### Metadata about dataset
+### Metadata about the dataset
 **Location**: Data is located in the public repository of Divvy.
 
 **Data Organization**: Ride data for each month is collected as a separate csv file, containing metrics like ride length(duration), latitude and longitude of start and end station, start and end station id and name, starting datetime and ending datetime, a rider id (used to associate with rider details), rideable type and whether the rider is a member or casual rider.
@@ -64,10 +64,10 @@ The Divvy dataset is designed to protect rider privacy by redacting all personal
 For this public dataset, the primary security risks lie in my local handling of the data, as the source repository is managed by Motivate International Inc.. To address this, I will store the downloaded data files in a secure location on my local machine. My work will be performed on a secure, private network to prevent interception. Since the dataset is anonymized, the security risk of a data breach is significantly minimized. For any derived or aggregated data I create, I will apply similar security best practices.
 
 #### Accessibility
- The public nature of the dataset supports data democratization by making information accessible to a wide audience. Beyond the data's availability, I am committed to ensuring that my final analysis and visualizations are accessible to all stakeholders, including those with disabilities. My presentation will incorporate best practices such as use of clear language, accessible visuals with proper alt texts and contrasts, and considerations for people with different technical backgrounds.
+ The public nature of the dataset supports data democratization by making information accessible to a wide audience. Beyond the data's availability, I am committed to ensuring that my final analysis and visualizations are accessible to all stakeholders, including those with disabilities. My presentation will incorporate best practices, including the use of clear language, accessible visuals with proper alt texts and contrasts, and considerations for individuals with diverse technical backgrounds.
 
 ### First Steps
-I loaded data for each month and aggregated them into a single file. This allows me to load the dataset into other 
+I loaded data for each month and aggregated them into a single file. This allows me to load the dataset into other scripts. 
 stages easily without looping and loading each file.
 
 ---
@@ -78,44 +78,44 @@ stages easily without looping and loading each file.
 2. The labels were cleaned, and any duplicates were removed.
 3. The timezones for `started_at` and `ended_at` were updated to use the Chicago timezone. (Explained in "What I 
    Learned" section).
-4. Each Ride Length was categorized into interval of 5 minutes, which was later cut short to `30 - 45`, `45 - 60` 
+4. Each Ride Length was categorized into intervals of 5 minutes, which was later cut short to `30 - 45`, `45 - 60` 
    and `60+` minutes.
-5. Then, I extracted the start day of the week, and month from the `started_at` attribute. Moreover, I mapped each 
+5. Then, I extracted the start day of the week and month from the `started_at` attribute. Moreover, I mapped each 
    month number to month name, as it can make reading the graphs and dataset a lot easier later down the line.
-6. After that, I wrote a utility function that converts difference between start and end latitudes to distance in KM.
+6. After that, I wrote a utility function that converts the difference between start and end latitudes to distance in KM.
 7. Then, the hours of the day attribute (derived) was categorized into different time periods like `"Late Night"`, 
-   `"Morning"`, `"Late Morning"`, etc. to easily get a grasp of time categorization.
+   `"Morning"`, `"Late Morning"`, etc., to easily get a grasp of time categorization.
 8. After that, I started checking for `na` values for `start_station_name` and `start_station_id`, and found that 
-   almost 20% of the dataset were missing that information. Since, dropping the dataset may skew the data and since 
-   many other attributes are filled for observations having missing stations, I decided to leave it without dropping 
+   Almost 20% of the dataset was missing that information. Since dropping the dataset may skew the data, and since 
+   Many other attributes are filled for observations having missing stations, I decided to leave it without dropping 
    them.
 9. To ensure there is no bias in missing station information among rider types (casual and members), I ran a quick 
-   check and found out that the missing data was almost evenly distributed.
+   Checked and found out that the missing data was almost evenly distributed.
 10. Then, I checked for missing information among rideable types (electric bike, scooter, and classical bike). None
-    of the classic bikes have missing location, 32.9% of electric bike have missing location, and 46.9% of electric
-    scooters have missing location 
+    of the classic bikes have missing location, 32.9% of electric bikes have missing location, and 46.9% of electric
+    Scooters have a missing location 
 ![Missing Station Information for Each Rideable Type Graph](./Graphs/missing_station_per_month_for_bike_type.png)
 11. An interesting insight I got was that Electric Scooters only had limited data associated with them, so I decided to analyze them further.
 12. Upon further inspection, the electric scooters were found to be only around 2% of the entire dataset, with half of them missing location data, so I decided to drop them.
-13. Next I look for invalid rides, namely, ones that have 0km distance or those with an unreasonable distance rode for a limited time (greater than 2KM (max speed of scooter assumed to 80KM/s), and duration of less than 1 minute).
-14. ~~I also dropped rides that were 0KM, and had the same origin and finishing latitudes and longitudes.~~ Those were likely round trips, so I decided to keep them.
-15. Finally, after dropping rides having `na` for distance and ride duration category. I exported the dataset for another the next step.
+13. Next, I look for invalid rides, namely, ones that have 0km distance or those with an unreasonable distance rode for a limited time (greater than 2KM (max speed of scooter assumed to 80KM/s), and duration of less than 1 minute).
+14. ~~I also dropped rides that were 0KM, and had the same origin and finishing latitudes and longitudes.~~ Those were likely round-trip, so I decided to keep them.
+15. Finally, after dropping rides having `na` for distance and ride duration categories. I exported the dataset for another the next step.
 
 ---
 
-## 4. Analyze
+## 4. Analyze (Analyze.R)
 
-First I measured the measures of center (mean, median, and mode) and variability (standard deviation) of ride lengths. The results revealed that casual riders rode more distance than members. However, the data is more spread out for casuals, indicating casuals have more unpredictible riding patterns compared to members.
+First, I measured the measures of center (mean, median, and mode) and variability (standard deviation) of ride lengths. The results revealed that casual riders rode a greater distance than members. However, the data is more spread out for casuals, indicating casuals have more unpredictable riding patterns compared to members.
 
 Then, I analysed the same statistical metrics for ride distances, which turned out to be similar for both casuals and members.
 
-Next, I moved on to find any patterns in the months and ride hours using mode. It was observed that August is the most popular month, for both members and casuals alike. I assume it might be due to summer vacation.
+Next, I moved on to find any patterns in the months and ride hours using mode. It was observed that August is the most popular month for both members and casuals alike. I assume it might be due to summer vacation.
 Moreover, evenings at around 5PM seems to be the most dense hour for rides.
-Taking ride distribution by month enabled me to confirm the above theory.
+Taking the ride distribution by month enabled me to confirm the above theory.
 
-Next,  I turned to see the average ride distance by hour and it seems that casual rides ride more distance compared to members.
+Next,  I turned to see the average ride distance by hour, and it seems that casual riders ride a greater distance compared to members.
 
-Then, I analysed the usage of electric vs classic bike among members and it turns out that both of them use electric bikes more than classical bikes.
+Then, I analysed the usage of electric vs classic bike among members, and it turns out that both of them use electric bikes more than classical bikes.
 
 Last but not least, I analysed the rides per days of the week and it was found that casual riders peak during weekend while members peak during weekdays.
 
@@ -123,53 +123,55 @@ Last but not least, I analysed the rides per days of the week and it was found t
 
 
 
-## 5. Share
+## 5. Share (Share.R)
+After summarizing the data and identifying behavioral patterns numerically, I visualized key relationships to help stakeholders quickly understand how casual riders and members differ in their biking habits.
+
 
 ### 1. Ride Duration Categorized for Members and Casual Riders
 ![Number of Casual and Member Riders categorized by Ride Duration Graph](./Graphs/casual_riders_vs_members__ride_duration.png)
 
-We can observe that casual members dominate 30+ minute ride. This could mean that members use bike routine commutes while casuals use them for leisure.
+We can observe that casual members dominate the 30+ minute ride. This could mean that members use bike routine commutes while casuals use them for leisure.
 
 
 ### 2. Ride Popularity During Weekdays vs Weekends
 ![Number of Casual and Member Riders categorized by Day of Week](./Graphs/casual_riders_vs_members__ride_day_distribution.png)
 
-We can observe that the usage is more distributed for members while casual rides tend to increase day by day until **Saturday** and shows a **small drop on Sunday**. The higher rides on weekends suggests that casual riders use bikes for leisure.
+We can observe that the usage is more distributed for members while casual rides tend to increase day by day until **Saturday** and shows a **small drop on Sunday**. The higher rides on weekends suggest that casual riders use bikes for leisure.
 
 
 ### 3. Monthly Distribution of Casual vs Members
 ![Number of Casual and Member Riders categorized by Month of Year](./Graphs/casual_riders_vs_members__ride_monthly_distribution.png)
 
-We can observe that rides are lower rides during winter months (Dec - Feb).
-But it increases from there and peaks during summer months, particularly August, which are vacation months.
+We can observe that rides are lower rides during the winter months (Dec - Feb).
+But it increases from there and peaks during the summer months, particularly August, which are vacation months.
 Although member rides also fall, we can see more consistent member rides, suggesting members usually use bike for commute.
 
 ### 4. Ride Distribution during various Times of the Day
 ![Ride Distribution during various daytime categories](./Graphs/casual_riders_vs_members__ride_daytime_cat_distribution.png)
 
-We can see that the rides, both for casuals and members increase throughout the day, with both rides dipping after evening.
+We can see that the rides, both for casuals and members, increase throughout the day, with both rides dipping after evening.
 
 #### For Additional Insight, we can compare hourly ride insights
 ![Ride Distribution during Different Hour of the Day](./Graphs/casual_riders_vs_members__ride_hourly_distribution.png)
 
-We can observe that the rides, both for casuals and members increase throughout the day, with both rides dipping after evening.
+We can observe that the rides, both for casuals and members, increase throughout the day, with both rides dipping after evening.
 
-### 5. Verifying that members use rides majorly for commute
+### 5. Verifying that members use rides majorly for commuting
 We can filter and separate weekends and weekdays to see riders' commute patterns.
 ![Hourly Ride Distribution (Weekdays and Weekends separated)](./Graphs/casual_riders_vs_members__weekend_weekday_ride_hourly_distribution.png)
 
-More member rides use bike during weekdays to commute to work.
-However, we can a lot of night rides during weekends, for both casual and members.
+More members ride use bike during weekdays to commute to work.
+However, we can have a lot of night rides during weekends, for both casual and members.
 
 ### 6. Usage Patterns of Electric vs Classic Bikes among Member and Casual Riders
 ![Usage Patterns of Electric vs Classic Bikes among Member and Casual Riders)](./Graphs/casual_riders_vs_members__rideable_type_distribution.png)
-Both ride types are used by members and casuals with members leading the chart.
+Both ride types are used by members and casuals, with members leading the chart.
 Electric bikes are preferred by both members and casuals.
 
 ### 7. Usage Patterns of Electric vs Classic Bikes among Member and Casual Riders by Day of Week
 ![Usage Patterns of Electric vs Classic Bikes among Member and Casual Riders by Day of the Week)](./Graphs/casual_riders_vs_members__rideable_type_member_casual_distribution.png)
-We can see that members use classic bike more or less consistently throughout the week.
-But casuals use both classic and electric bikes during the weekend more, indicating further that casuals use bikes for leisure.
+We can see that members use the classic bike more or less consistently throughout the week.
+But casuals use both classic and electric bikes more during the weekend, indicating further that casuals use bikes for leisure.
 
 ---
 
@@ -177,19 +179,26 @@ But casuals use both classic and electric bikes during the weekend more, indicat
 
 ## 6. Act
 
-As per analysis, we can observe the following differences between casuals and members, which can be translated to the following strategies:
-1. **Weekend Sales**: Since casuals on average bike more, we can make sales that targets those bikers by comparing cost per ride and membership cost. Adding a discount to it will make the deal more attractive.
-2. **Monthly Membership**: Since casuals peak during summertime, providing a monthly membership can allow them to see the cost as justifable to per ride cost.
-3. **Festive Competitions**: By offering festive competition, especially during summer exclusive to member, we can nudge regular riders like tourist to buy atleast a monthly package.
+Based on the analysis, Cyclistic can leverage the following insights to design more effective conversion strategies:
+
+### Weekend Promotions for Casual Riders
+Casual riders are most active on weekends. Offer discounted weekend memberships or bundle passes to encourage them to see value in committing to longer-term plans.
+
+### Seasonal and Monthly Membership Options
+Since casual ridership peaks in the summer, introduce flexible one-month memberships during vacation months to increase short-term conversions that can later be renewed.
+
+### Event-Based Engagement
+Organize community or festival ride challenges exclusive to members, particularly during the summer, to promote belonging and incentivize casual riders to upgrade.
 
 ---
 
 ## What I Learned
 1. Make sure to correctly add the timezone to datetime fields. This is especially true if the data was collected in a timezone different from yours.
-2. If you want to preserve order, use factoring.
-3. Some mistakes can reveal after data cleaning. If you keep a track of data, and the steps taken, and use version control, it is easy to go in and make necessary changes easily. (I misinterpreted 0KM rides as invalid, but there is big possibility that the rides started and ended at the same station)
+2. If you want to preserve order for nominal data (like months) in a graph, use factoring.
+3. Some mistakes can be revealed after data cleaning. If you keep a track of data, the steps taken, and use version control, it is easy to go in and make necessary changes easily. (I misinterpreted 0KM rides as invalid, but there is a big possibility that the rides started and ended at the same station)
 
 ---
 
 ## AI Usage Disclosure
-ChatGPT Study Mode was used for this analysis case study. AI was used for braining and exploring possibilities and as a brainstorming partner to reveals mishaps like timezone mismatch, which led to incorrect analytical results.
+ChatGPT (Study Mode, GPT-5) was used as a collaborative assistant during this analysis to structure ideas, identify potential data quality issues (such as timezone discrepancies), and refine phrasing for clarity.
+All data cleaning, calculations, and final interpretations were independently performed and verified by the author.
