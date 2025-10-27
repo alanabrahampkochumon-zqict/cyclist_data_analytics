@@ -8,6 +8,15 @@ Date: 25th October 2025
 
 Stakeholder: Lily Moreno, Chief Marketing Director, Cyclists.
 
+### Executive Summary
+This analysis examines one year of Cyclistic bike-share data to understand how casual riders and annual members use the service differently.
+After cleaning and standardizing over six million trip records, I explored trends in ride duration, timing, bike type, and seasonality.
+The findings reveal that members primarily use Cyclistic for weekday commutes, with consistent riding patterns throughout the year,
+while casual riders are more active on weekends and evenings, suggesting a leisure-oriented usage.
+Electric bikes are preferred across both groups, indicating convenience as a shared motivator.
+Based on these insights, several data-driven marketing strategies are recommended, including targeted weekend promotions,
+seasonal membership plans, and event-based campaigns, to encourage casual riders to convert into long-term members.
+
 ----
 
 
