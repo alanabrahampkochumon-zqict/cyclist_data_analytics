@@ -74,7 +74,7 @@ stages easily without looping and loading each file.
 
 
 ## 3. Process (Process.R)
-1. The data was first loading into a data frame.
+1. The data was first loaded into a data frame.
 2. The labels were cleaned, and any duplicates were removed.
 3. The timezones for `started_at` and `ended_at` were updated to use the Chicago timezone. (Explained in "What I 
    Learned" section).
@@ -105,6 +105,19 @@ stages easily without looping and loading each file.
 
 ## 4. Analyze
 
+First I measured the measures of center (mean, median, and mode) and variability (standard deviation) of ride lengths. The results revealed that casual riders rode more distance than members. However, the data is more spread out for casuals, indicating casuals have more unpredictible riding patterns compared to members.
+
+Then, I analysed the same statistical metrics for ride distances, which turned out to be similar for both casuals and members.
+
+Next, I moved on to find any patterns in the months and ride hours using mode. It was observed that August is the most popular month, for both members and casuals alike. I assume it might be due to summer vacation.
+Moreover, evenings at around 5PM seems to be the most dense hour for rides.
+Taking ride distribution by month enabled me to confirm the above theory.
+
+Next,  I turned to see the average ride distance by hour and it seems that casual rides ride more distance compared to members.
+
+Then, I analysed the usage of electric vs classic bike among members and it turns out that both of them use electric bikes more than classical bikes.
+
+Last but not least, I analysed the rides per days of the week and it was found that casual riders peak during weekend while members peak during weekdays.
 
 ---
 
@@ -164,13 +177,19 @@ But casuals use both classic and electric bikes during the weekend more, indicat
 
 ## 6. Act
 
-1. TODO
-2. TODO
-3. TODO
-4. TODO
+As per analysis, we can observe the following differences between casuals and members, which can be translated to the following strategies:
+1. **Weekend Sales**: Since casuals on average bike more, we can make sales that targets those bikers by comparing cost per ride and membership cost. Adding a discount to it will make the deal more attractive.
+2. **Monthly Membership**: Since casuals peak during summertime, providing a monthly membership can allow them to see the cost as justifable to per ride cost.
+3. **Festive Competitions**: By offering festive competition, especially during summer exclusive to member, we can nudge regular riders like tourist to buy atleast a monthly package.
 
+---
 
 ## What I Learned
 1. Make sure to correctly add the timezone to datetime fields. This is especially true if the data was collected in a timezone different from yours.
 2. If you want to preserve order, use factoring.
 3. Some mistakes can reveal after data cleaning. If you keep a track of data, and the steps taken, and use version control, it is easy to go in and make necessary changes easily. (I misinterpreted 0KM rides as invalid, but there is big possibility that the rides started and ended at the same station)
+
+---
+
+## AI Usage Disclosure
+ChatGPT Study Mode was used for this analysis case study. AI was used for braining and exploring possibilities and as a brainstorming partner to reveals mishaps like timezone mismatch, which led to incorrect analytical results.
